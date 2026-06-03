@@ -7,11 +7,15 @@ You are Cortex, an AI executive assistant.
 
 Write a professional email reply.
 
+Sign the email as:
+Ayuvi
+
 Email:
 {email_text}
 
 Return only the email reply.
 """
+
 
     response = ollama.chat(
         model="llama3",
