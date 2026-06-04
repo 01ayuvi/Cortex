@@ -19,31 +19,40 @@ import os
 SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"]
 
 def get_gmail_service():
+
     creds = None
 
     if os.path.exists("token.json"):
         creds = Credentials.from_authorized_user_file(
-            "token.json", SCOPES
+            "token.json",
+            SCOPES
         )
 
     if not creds or not creds.valid:
+
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
+
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
                 "credentials.json",
                 SCOPES
             )
+
             creds = flow.run_local_server(port=0)
 
         with open("token.json", "w") as token:
             token.write(creds.to_json())
 
-    service = build("gmail", "v1", credentials=creds)
+    service = build(
+        "gmail",
+        "v1",
+        credentials=creds
+    )
+
     return service
-
-
 def get_unread_emails():
+
     service = get_gmail_service()
 
     results = service.users().messages().list(
@@ -54,36 +63,39 @@ def get_unread_emails():
 
     messages = results.get("messages", [])
 
+    email_data = []
+
     if not messages:
-        print("No unread emails found.")
-        return
+        return []
 
     for msg in messages:
+
         message = service.users().messages().get(
-        userId="me",
-        id=msg["id"]
-    ).execute()
+            userId="me",
+            id=msg["id"]
+        ).execute()
 
-    headers = message["payload"]["headers"]
+        headers = message["payload"]["headers"]
 
-    subject = "No Subject"
-    sender = "Unknown"
+        subject = "No Subject"
+        sender = "Unknown"
+        snippet = message.get("snippet", "")
 
-    for header in headers:
+        for header in headers:
 
-        if header["name"] == "Subject":
-            subject = header["value"]
+            if header["name"] == "Subject":
+                subject = header["value"]
 
-        if header["name"] == "From":
-            sender = header["value"]
+            if header["name"] == "From":
+                sender = header["value"]
 
-    priority = classify_email(subject)
+        priority = classify_email(subject)
 
-    print("=" * 50)
-    print("FROM:", sender)
-    print("SUBJECT:", subject)
-    print("PRIORITY:", priority)
+        email_data.append({
+            "sender": sender,
+            "subject": subject,
+            "snippet": snippet,
+            "priority": priority
+        })
 
-
-if __name__ == "__main__":
-    get_unread_emails()
+    return email_data
