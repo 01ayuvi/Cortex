@@ -35,3 +35,12 @@ def get_tasks():
     )
 
     return cursor.fetchall()
+
+def task_exists(task):
+
+    cursor.execute(
+        "SELECT * FROM tasks WHERE task = ?",
+        (task,)
+    )
+
+    return cursor.fetchone() is not None
