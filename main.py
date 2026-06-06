@@ -11,7 +11,7 @@ def main():
     print("=" * 50)
 
     emails = get_unread_emails()
-
+      
     print(f"\nUnread Emails: {len(emails)}\n")
 
     for email in emails:

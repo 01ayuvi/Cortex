@@ -42,7 +42,7 @@ Daily Briefing Agent
 * Email Draft Generation
 * SQLite Task Storage
 * Memory & RAG
-* Streamlit Dashboard
+* - Streamlit Dashboard (In Progress)
 * Docker Deployment
 
 ## Current Status
