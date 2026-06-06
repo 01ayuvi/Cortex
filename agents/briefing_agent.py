@@ -23,7 +23,6 @@ def generate_briefing():
     if not tasks:
         print("No tasks found.")
         return
-
     print("\nTasks:\n")
 
     for task in tasks:
