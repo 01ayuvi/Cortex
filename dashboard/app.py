@@ -103,17 +103,7 @@ with col1:
     if st.button("Run Cortex Pipeline"):
         with st.spinner("Running Cortex..."):
             try:
-                st.write("Step 1")
-                import time
-
-                time.sleep(2)
-
-                result = {
-                    "emails_processed": 1,
-                    "new_tasks": 1
-                }
-                st.write("Step 2")
-
+                result = main()
                 st.success(
                     f"Processed {result['emails_processed']} emails | Added {result['new_tasks']} tasks"
                 )
@@ -123,9 +113,10 @@ with col1:
                 )
 
             except Exception as e:
+
                 st.error(
                     f"Pipeline Error: {e}"
-                )  
+                ) 
 
 with col2:
 
