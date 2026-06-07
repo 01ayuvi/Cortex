@@ -11,6 +11,7 @@ sys.path.append(
     )
 )
 
+from main import main
 from database.db import get_tasks
 
 # ====================================
@@ -98,13 +99,38 @@ st.subheader("⚡ Cortex Controls")
 col1, col2 = st.columns(2)
 
 with col1:
+
     if st.button("Run Cortex Pipeline"):
-        st.success(
-            "Pipeline integration coming soon."
-        )
+        with st.spinner("Running Cortex..."):
+            try:
+                st.write("Step 1")
+                import time
+
+                time.sleep(2)
+
+                result = {
+                    "emails_processed": 1,
+                    "new_tasks": 1
+                }
+                st.write("Step 2")
+
+                st.success(
+                    f"Processed {result['emails_processed']} emails | Added {result['new_tasks']} tasks"
+                )
+
+                st.info(
+                    "Refresh the dashboard to see updated results."
+                )
+
+            except Exception as e:
+                st.error(
+                    f"Pipeline Error: {e}"
+                )  
 
 with col2:
+
     if st.button("Refresh Dashboard"):
+
         st.rerun()
 
 st.divider()

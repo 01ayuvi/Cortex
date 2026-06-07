@@ -6,28 +6,27 @@ from database.db import save_task, task_exists
 
 def main():
 
-    print("=" * 50)
-    print("CORTEX DAILY BRIEFING")
-    print("=" * 50)
+    print("DEBUG: Starting Cortex")
 
     emails = get_unread_emails()
-      
-    print(f"\nUnread Emails: {len(emails)}\n")
+
+    print(f"DEBUG: Found {len(emails)} emails")
+
+    processed_tasks = 0
 
     for email in emails:
 
-        print("-" * 50)
-        print("FROM:", email["sender"])
-        print("SUBJECT:", email["subject"])
-        print("PRIORITY:", email["priority"])
-        print("SNIPPET:", email["snippet"])
+        print(
+            f"DEBUG: Processing -> {email['subject']}"
+        )
 
         task_data = extract_task(
             email["snippet"]
         )
 
-        print("\nTASK DATA:")
-        print(task_data)
+        print(
+            f"DEBUG: Extracted -> {task_data}"
+        )
 
         if task_data["action_required"]:
 
@@ -41,15 +40,47 @@ def main():
                     email["priority"]
                 )
 
-                print("Task saved to database.")
+                processed_tasks += 1
+
+                print(
+                    "DEBUG: Task saved"
+                )
 
             else:
 
-                print("Task already exists.")
+                print(
+                    "DEBUG: Task already exists"
+                )
 
-    print("\nGenerating briefing...\n")
-    generate_briefing()
+    result = {
+        "emails_processed": len(emails),
+        "new_tasks": processed_tasks
+    }
+
+    print(
+        f"DEBUG: Completed -> {result}"
+    )
+
+    return result
 
 
 if __name__ == "__main__":
-    main()
+
+    result = main()
+
+    print("\n")
+    print("=" * 50)
+    print("CORTEX DAILY BRIEFING")
+    print("=" * 50)
+
+    print(
+        f"Emails Processed: {result['emails_processed']}"
+    )
+
+    print(
+        f"New Tasks Added: {result['new_tasks']}"
+    )
+
+    print("\nGenerating briefing...\n")
+
+    generate_briefing()
