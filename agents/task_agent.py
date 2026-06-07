@@ -3,6 +3,28 @@ import json
 import time
 
 
+def normalize_task(task):
+
+    if not task:
+        return task
+
+    task_lower = task.lower()
+
+    if "recovery email" in task_lower:
+        return "Verify account security"
+
+    if "account change" in task_lower:
+        return "Verify account security"
+
+    if "security" in task_lower:
+        return "Verify account security"
+
+    if "account activity" in task_lower:
+        return "Verify account security"
+
+    return task.title()
+
+
 def extract_task(email_text):
 
     prompt = f"""
@@ -55,6 +77,12 @@ Email:
         json_text = content[start:end]
 
         task_data = json.loads(json_text)
+
+        if task_data["task"]:
+
+            task_data["task"] = normalize_task(
+                task_data["task"]
+            )
 
         print(
             f"DEBUG: Extracted task -> {task_data}"
