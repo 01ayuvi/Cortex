@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import sys
 import os
+import requests
 
 sys.path.append(
     os.path.dirname(
@@ -10,9 +11,6 @@ sys.path.append(
         )
     )
 )
-
-from main import main
-from database.db import get_tasks
 
 # ====================================
 # PAGE CONFIG
@@ -28,7 +26,21 @@ st.set_page_config(
 # LOAD TASKS
 # ====================================
 
-tasks = get_tasks()
+try:
+
+    response = requests.get(
+        "http://127.0.0.1:8000/tasks"
+    )
+
+    tasks = response.json()
+
+except Exception as e:
+
+    st.error(
+        f"API Error: {e}"
+    )
+
+    tasks = []
 
 # ====================================
 # METRICS
@@ -38,12 +50,11 @@ total_tasks = len(tasks)
 
 high_priority = sum(
     1 for task in tasks
-    if task[3] == "HIGH"
+    if task["priority"] == "HIGH"
 )
-
 deadlines = sum(
     1 for task in tasks
-    if task[2]
+    if task["deadline"]
 )
 
 # ====================================
@@ -103,7 +114,11 @@ with col1:
     if st.button("Run Cortex Pipeline"):
         with st.spinner("Running Cortex..."):
             try:
-                result = main()
+                response = requests.post(
+                "http://127.0.0.1:8000/run-cortex"
+                )
+
+                result = response.json()
                 st.success(
                     f"Processed {result['emails_processed']} emails | Added {result['new_tasks']} tasks"
                 )
@@ -162,8 +177,8 @@ if tasks:
 
     for task in tasks:
 
-        task_name = task[1]
-        priority = task[3]
+        task_name = task["task"]
+        priority = task["priority"]
 
         if priority == "HIGH":
             st.success(f"🔥 {task_name}")
@@ -190,19 +205,20 @@ st.subheader("📌 Task Dashboard")
 
 if tasks:
 
-    df = pd.DataFrame(
-        tasks,
-        columns=[
-            "ID",
-            "Task",
-            "Deadline",
-            "Priority"
-        ]
+    df = pd.DataFrame(tasks)
+
+    df = df.rename(
+        columns={
+            "task": "Task",
+            "deadline": "Deadline",
+            "priority": "Priority",
+            "category": "Category",
+            "status": "Status"
+        }
     )
 
-    df = df.drop(
-        columns=["ID"]
-    )
+    if "id" in df.columns:
+        df = df.drop(columns=["id"])
 
     # -------------------------
     # SEARCH
@@ -246,7 +262,7 @@ if tasks:
 
     st.dataframe(
         df,
-        use_container_width=True,
+        width="stretch",
         hide_index=True
     )
 
@@ -256,8 +272,6 @@ else:
         "No tasks found."
     )
 
-st.divider()
-
 # ====================================
 # PRIORITY ANALYTICS
 # ====================================
@@ -266,14 +280,12 @@ st.subheader("📊 Priority Analytics")
 
 if tasks:
 
-    analytics_df = pd.DataFrame(
-        tasks,
-        columns=[
-            "ID",
-            "Task",
-            "Deadline",
-            "Priority"
-        ]
+    analytics_df = pd.DataFrame(tasks)
+
+    analytics_df = analytics_df.rename(
+        columns={
+            "priority": "Priority"
+        }
     )
 
     priority_counts = (
@@ -286,7 +298,7 @@ if tasks:
     st.dataframe(
         priority_counts,
         hide_index=True,
-        use_container_width=True
+        width="stretch"
     )
 
 else:
@@ -294,8 +306,6 @@ else:
     st.info(
         "No analytics available."
     )
-
-st.divider()
 
 # ====================================
 # FOOTER
