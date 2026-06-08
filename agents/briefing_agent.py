@@ -8,6 +8,7 @@ sys.path.append(
         )
     )
 )
+
 from database.db import get_tasks
 
 
@@ -15,30 +16,51 @@ def generate_briefing():
 
     tasks = get_tasks()
 
-    print("\n")
-    print("=" * 50)
-    print("CORTEX DAILY BRIEFING")
-    print("=" * 50)
+    briefing = []
+
+    briefing.append("=" * 50)
+    briefing.append("CORTEX DAILY BRIEFING")
+    briefing.append("=" * 50)
 
     if not tasks:
-        print("No tasks found.")
-        return
-    print("\nTasks:\n")
+
+        briefing.append("No tasks found.")
+
+        briefing_text = "\n".join(briefing)
+
+        return briefing_text
+
+    briefing.append("")
+    briefing.append("Tasks:")
+    briefing.append("")
 
     for task in tasks:
 
-        task_id = task[0]
         task_name = task[1]
         deadline = task[2]
         priority = task[3]
 
-        print(f"[{priority}] {task_name}")
+        briefing.append(
+            f"[{priority}] {task_name}"
+        )
 
         if deadline:
-            print(f"Deadline: {deadline}")
 
-        print()
+            briefing.append(
+                f"Deadline: {deadline}"
+            )
+
+        briefing.append("")
+
+    briefing_text = "\n".join(
+        briefing
+    )
+
+    return briefing_text
 
 
 if __name__ == "__main__":
-    generate_briefing()
+
+    print(
+        generate_briefing()
+    )
