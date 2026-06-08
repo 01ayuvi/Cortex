@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from main import main
 from database.db import get_tasks
 from agents.briefing_agent import generate_briefing
+from database.db import update_task_status
 
 app = FastAPI(
     title="Cortex API",
@@ -33,7 +34,6 @@ def run_cortex():
 
     return result
 
-
 @app.get("/tasks")
 def tasks():
 
@@ -47,7 +47,9 @@ def tasks():
             "id": task[0],
             "task": task[1],
             "deadline": task[2],
-            "priority": task[3]
+            "priority": task[3],
+            "category": task[4],
+            "status": task[5]
         })
 
     return task_list
@@ -57,4 +59,19 @@ def briefing():
 
     return {
         "briefing": generate_briefing()
+    }
+
+@app.put("/tasks/{task_id}")
+def update_status(
+    task_id: int,
+    status: str
+):
+
+    update_task_status(
+        task_id,
+        status
+    )
+
+    return {
+        "message": "Task updated successfully"
     }

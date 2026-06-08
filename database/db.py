@@ -16,10 +16,12 @@ def initialize_database():
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS tasks (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        task TEXT,
-        deadline TEXT,
-        priority TEXT
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    task TEXT,
+    deadline TEXT,
+    priority TEXT,
+    category TEXT,
+    status TEXT
     )
     """)
 
@@ -30,22 +32,36 @@ def initialize_database():
 initialize_database()
 
 
-def save_task(task, deadline, priority):
+def save_task(
+    task,
+    deadline,
+    priority,
+    category,
+    status="PENDING"
+):
 
     conn = get_connection()
     cursor = conn.cursor()
 
     cursor.execute(
-        """
-        INSERT INTO tasks (
-            task,
-            deadline,
-            priority
-        )
-        VALUES (?, ?, ?)
-        """,
-        (task, deadline, priority)
+    """
+    INSERT INTO tasks (
+        task,
+        deadline,
+        priority,
+        category,
+        status
     )
+    VALUES (?, ?, ?, ?, ?)
+    """,
+    (
+        task,
+        deadline,
+        priority,
+        category,
+        status
+    )
+)
 
     conn.commit()
     conn.close()
@@ -82,3 +98,22 @@ def task_exists(task):
     conn.close()
 
     return exists
+
+def update_task_status(task_id, status):
+
+    status = status.upper()
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        UPDATE tasks
+        SET status = ?
+        WHERE id = ?
+        """,
+        (status, task_id)
+    )
+
+    conn.commit()
+    conn.close()

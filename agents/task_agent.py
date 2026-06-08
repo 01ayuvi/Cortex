@@ -83,6 +83,9 @@ Email:
             task_data["task"] = normalize_task(
                 task_data["task"]
             )
+            task_data["category"] = detect_category(
+    task_data["task"]
+)
 
         print(
             f"DEBUG: Extracted task -> {task_data}"
@@ -123,3 +126,21 @@ Thanks
             indent=4
         )
     )
+
+def detect_category(task):
+
+    task = task.lower()
+
+    if "security" in task:
+        return "Security"
+
+    if "report" in task:
+        return "Work"
+
+    if "interview" in task:
+        return "Recruitment"
+
+    if "meeting" in task:
+        return "Meetings"
+
+    return "General"

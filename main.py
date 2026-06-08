@@ -37,8 +37,9 @@ def main():
                 save_task(
                     task_data["task"],
                     task_data["deadline"],
-                    email["priority"]
-                )
+                    email["priority"],
+                    task_data["category"]
+                ) 
 
                 processed_tasks += 1
 
