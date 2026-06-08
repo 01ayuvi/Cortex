@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from main import main
 
 app = FastAPI(
     title="Cortex API",
@@ -21,3 +22,11 @@ def health():
     return {
         "status": "healthy"
     }
+
+
+@app.post("/run-cortex")
+def run_cortex():
+
+    result = main()
+
+    return result
