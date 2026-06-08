@@ -69,7 +69,7 @@ def update_status(
 
     update_task_status(
         task_id,
-        status
+        status.upper()
     )
 
     return {
