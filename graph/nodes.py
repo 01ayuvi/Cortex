@@ -1,5 +1,5 @@
 from agents.task_agent import extract_task
-
+from agents.briefing_agent import generate_briefing
 
 def supervisor_agent(state):
 
@@ -67,3 +67,19 @@ def priority_agent(state):
     return {
         "priority": priority
     }
+
+def briefing_agent(state):
+
+    try:
+
+        briefing = generate_briefing()
+
+        return {
+            "briefing": briefing
+        }
+
+    except Exception:
+
+        return {
+            "briefing": "Unable to generate briefing"
+        }

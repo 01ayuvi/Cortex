@@ -5,7 +5,8 @@ from graph.nodes import (
     supervisor_agent,
     email_agent,
     task_agent,
-    priority_agent
+    priority_agent,
+    briefing_agent
 )
 
 workflow = StateGraph(CortexState)
@@ -37,6 +38,11 @@ workflow.add_node(
     priority_agent
 )
 
+workflow.add_node(
+    "briefing_agent",
+    briefing_agent
+)
+
 
 # Entry Point
 workflow.set_entry_point(
@@ -65,6 +71,11 @@ workflow.add_edge(
 workflow.add_edge(
     "task_agent",
     "priority_agent"
+)
+
+workflow.add_edge(
+    "priority_agent",
+    "briefing_agent"
 )
 
 

@@ -12,3 +12,5 @@ class CortexState(TypedDict):
     priority: str
 
     route: str
+
+    briefing: str
