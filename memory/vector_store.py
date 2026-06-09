@@ -10,7 +10,13 @@ collection = client.get_or_create_collection(
 
 def save_email(email_id, email_content):
 
-    collection.add(
-        ids=[str(email_id)],
-        documents=[email_content]
-    )
+    try:
+
+        collection.add(
+            ids=[str(email_id)],
+            documents=[email_content]
+        )
+
+    except Exception:
+
+        pass

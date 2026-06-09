@@ -26,11 +26,17 @@ def normalize_task(task):
     return task.title()
 
 
+
 def extract_task(email_text):
 
     from memory.retrieval import retrieve_context
 
     context = retrieve_context(email_text)
+    print("\n")
+    print("========== RAG CONTEXT ==========")
+    print(context)
+    print("=================================")
+    print("\n")
 
     prompt = f"""
 You are Cortex AI.
@@ -127,6 +133,7 @@ Schema:
             "deadline": None,
             "category": "Other"
         }
+    
 
 def detect_category(task):
 
