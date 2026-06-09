@@ -75,3 +75,33 @@ def update_status(
     return {
         "message": "Task updated successfully"
     }
+
+@app.get("/summary")
+def summary():
+
+    tasks = get_tasks()
+
+    total = len(tasks)
+
+    completed = sum(
+        1 for task in tasks
+        if task[5] == "COMPLETED"
+    )
+
+    pending = total - completed
+
+    completion_rate = 0
+
+    if total:
+
+        completion_rate = round(
+            completed * 100 / total,
+            2
+        )
+
+    return {
+        "total_tasks": total,
+        "completed": completed,
+        "pending": pending,
+        "completion_rate": completion_rate
+    }

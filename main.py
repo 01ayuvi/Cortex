@@ -2,6 +2,7 @@ from integrations.gmail_client import get_unread_emails
 from agents.task_agent import extract_task
 from agents.briefing_agent import generate_briefing
 from database.db import save_task, task_exists
+from memory.vector_store import save_email
 
 
 def main():
@@ -15,9 +16,28 @@ def main():
     processed_tasks = 0
 
     for email in emails:
+        print(email)
 
         print(
             f"DEBUG: Processing -> {email['subject']}"
+        )
+
+        # Create richer email content for memory storage
+        email_text = f"""
+Subject: {email['subject']}
+
+Content:
+{email['snippet']}
+"""
+
+        # Save email into ChromaDB memory
+        save_email(
+            str(hash(email_text)),
+            email_text
+        )
+
+        print(
+            "DEBUG: Email stored in memory"
         )
 
         task_data = extract_task(
@@ -39,7 +59,7 @@ def main():
                     task_data["deadline"],
                     email["priority"],
                     task_data["category"]
-                ) 
+                )
 
                 processed_tasks += 1
 
