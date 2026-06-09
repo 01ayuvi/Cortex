@@ -1,5 +1,6 @@
 from typing import TypedDict
 
+
 class CortexState(TypedDict):
 
     email_text: str

@@ -2,17 +2,24 @@ from langgraph.graph import StateGraph
 
 from graph.state import CortexState
 from graph.nodes import (
-    email_agent,
-    task_agent
-)
-
-from graph.nodes import (
+    supervisor_agent,
     email_agent,
     task_agent,
     priority_agent
 )
-workflow = StateGraph(
-    CortexState
+
+workflow = StateGraph(CortexState)
+
+
+def route_email(state):
+
+    return state["route"]
+
+
+# Nodes
+workflow.add_node(
+    "supervisor_agent",
+    supervisor_agent
 )
 
 workflow.add_node(
@@ -25,21 +32,41 @@ workflow.add_node(
     task_agent
 )
 
-workflow.set_entry_point(
-    "email_agent"
+workflow.add_node(
+    "priority_agent",
+    priority_agent
 )
 
+
+# Entry Point
+workflow.set_entry_point(
+    "supervisor_agent"
+)
+
+
+# Conditional Routing
+workflow.add_conditional_edges(
+    "supervisor_agent",
+    route_email,
+    {
+        "task": "email_agent",
+        "priority": "priority_agent",
+        "ignore": "__end__"
+    }
+)
+
+
+# Linear Flow
 workflow.add_edge(
     "email_agent",
     "task_agent"
 )
 
-workflow.add_node(
-    "priority_agent",
-    priority_agent
-)
 workflow.add_edge(
     "task_agent",
     "priority_agent"
 )
+
+
+# Compile Graph
 app = workflow.compile()
