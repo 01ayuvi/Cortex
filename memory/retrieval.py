@@ -1,7 +1,7 @@
 from memory.vector_store import collection
 
 
-def retrieve_context(query: str, limit: int = 3):
+def retrieve_context(query: str, limit: int = 1):
 
     results = collection.query(
         query_texts=[query],
