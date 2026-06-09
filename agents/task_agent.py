@@ -1,6 +1,7 @@
 import ollama
 import json
 import time
+from memory.retrieval import retrieve_context
 
 
 def normalize_task(task):
@@ -27,15 +28,34 @@ def normalize_task(task):
 
 def extract_task(email_text):
 
-    prompt = f"""
-You are a JSON API.
+    from memory.retrieval import retrieve_context
 
-Rules:
-- Return ONLY valid JSON
-- No explanation
-- No markdown
-- No comments
-- No extra text
+    context = retrieve_context(email_text)
+
+    prompt = f"""
+You are Cortex AI.
+
+You have access to previous related emails.
+
+Related historical emails:
+
+{context}
+
+Current email:
+
+{email_text}
+
+Instructions:
+
+- Determine if action is required.
+- Extract the main task.
+- Extract any deadline if present.
+- Determine the most appropriate category.
+- Use historical context only if relevant.
+- Return ONLY valid JSON.
+- No markdown.
+- No explanations.
+- No comments.
 
 Schema:
 
@@ -44,9 +64,6 @@ Schema:
     "task": "task description",
     "deadline": "deadline or null"
 }}
-
-Email:
-{email_text}
 """
 
     try:
@@ -83,9 +100,14 @@ Email:
             task_data["task"] = normalize_task(
                 task_data["task"]
             )
+
             task_data["category"] = detect_category(
-    task_data["task"]
-)
+                task_data["task"]
+            )
+
+        print(
+            f"DEBUG: Retrieved Context -> {context[:200]}"
+        )
 
         print(
             f"DEBUG: Extracted task -> {task_data}"
@@ -102,30 +124,9 @@ Email:
         return {
             "action_required": False,
             "task": None,
-            "deadline": None
+            "deadline": None,
+            "category": "Other"
         }
-
-
-if __name__ == "__main__":
-
-    sample_email = """
-Hi Ayuvi,
-
-Please submit the performance report by Friday.
-
-Thanks
-"""
-
-    result = extract_task(
-        sample_email
-    )
-
-    print(
-        json.dumps(
-            result,
-            indent=4
-        )
-    )
 
 def detect_category(task):
 
