@@ -1,4 +1,5 @@
 from config import CHROMA_DB_PATH
+import chromadb
 
 client = chromadb.PersistentClient(
     path=CHROMA_DB_PATH
