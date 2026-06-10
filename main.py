@@ -3,15 +3,17 @@ from agents.task_agent import extract_task
 from agents.briefing_agent import generate_briefing
 from database.db import save_task, task_exists
 from memory.vector_store import save_email
-
+from logging_config import logger
 
 def main():
 
-    print("DEBUG: Starting Cortex")
+    logger.info("Starting Cortex")
 
     emails = get_unread_emails()
 
-    print(f"DEBUG: Found {len(emails)} emails")
+    logger.info(
+    f"Found {len(emails)} emails"
+)
 
     processed_tasks = 0
 
