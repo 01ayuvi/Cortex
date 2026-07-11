@@ -21,6 +21,52 @@ st.set_page_config(
     page_icon="🧠",
     layout="wide"
 )
+# ====================================
+# CUSTOM STYLING
+# ====================================
+
+st.markdown("""
+<style>
+
+/* Remove Streamlit header */
+header {
+    visibility: hidden;
+}
+
+/* Remove footer */
+footer {
+    visibility: hidden;
+}
+
+/* Reduce top padding */
+.block-container{
+    padding-top:2rem;
+    padding-bottom:2rem;
+}
+
+/* Metric cards */
+div[data-testid="metric-container"]{
+    background:#1e1e1e;
+    border:1px solid #333;
+    padding:18px;
+    border-radius:14px;
+}
+
+/* Buttons */
+.stButton>button{
+    width:100%;
+    border-radius:10px;
+    height:45px;
+    font-weight:bold;
+}
+
+/* Sidebar */
+section[data-testid="stSidebar"]{
+    border-right:1px solid #2c2c2c;
+}
+
+</style>
+""", unsafe_allow_html=True)
 
 # ====================================
 # LOAD TASKS
@@ -65,8 +111,15 @@ with st.sidebar:
 
     st.title("🧠 Cortex")
 
-    st.markdown(
-        "AI-Powered Email Intelligence Assistant"
+    st.markdown("""
+    ### AI-Powered Email Intelligence Platform
+
+    Automatically process emails, extract tasks using Llama 3, prioritize work, and generate intelligent daily briefings.
+
+    ---
+    """)
+    st.info(
+    "👋 Welcome back! Cortex is ready to analyze your inbox and organize your work."
     )
 
     st.divider()
