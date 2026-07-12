@@ -4,6 +4,12 @@ import sys
 import os
 import requests
 
+from services.api import (
+    get_tasks,
+    run_cortex,
+    complete_task
+)
+
 sys.path.append(
     os.path.dirname(
         os.path.dirname(
@@ -73,19 +79,10 @@ section[data-testid="stSidebar"]{
 # ====================================
 
 try:
-
-    response = requests.get(
-        "http://127.0.0.1:8000/tasks"
-    )
-
-    tasks = response.json()
+    tasks = get_tasks()
 
 except Exception as e:
-
-    st.error(
-        f"API Error: {e}"
-    )
-
+    st.error(f"API Error: {e}")
     tasks = []
 
 # ====================================
@@ -167,11 +164,7 @@ with col1:
     if st.button("Run Cortex Pipeline"):
         with st.spinner("Running Cortex..."):
             try:
-                response = requests.post(
-                "http://127.0.0.1:8000/run-cortex"
-                )
-
-                result = response.json()
+                result = run_cortex()
                 st.success(
                     f"Processed {result['emails_processed']} emails | Added {result['new_tasks']} tasks"
                 )
@@ -288,12 +281,7 @@ for task in tasks:
                 key=f"complete_{task['id']}"
             ):
 
-                requests.put(
-                    f"http://127.0.0.1:8000/tasks/{task['id']}",
-                    params={
-                        "status": "COMPLETED"
-                    }
-                )
+                complete_task(task["id"])
 
                 st.rerun()
 
