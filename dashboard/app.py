@@ -4,6 +4,8 @@ import sys
 import os
 import requests
 
+from styles.theme import apply_theme
+
 from services.api import (
     get_tasks,
     run_cortex,
@@ -27,52 +29,11 @@ st.set_page_config(
     page_icon="🧠",
     layout="wide"
 )
+apply_theme()
 # ====================================
 # CUSTOM STYLING
 # ====================================
 
-st.markdown("""
-<style>
-
-/* Remove Streamlit header */
-header {
-    visibility: hidden;
-}
-
-/* Remove footer */
-footer {
-    visibility: hidden;
-}
-
-/* Reduce top padding */
-.block-container{
-    padding-top:2rem;
-    padding-bottom:2rem;
-}
-
-/* Metric cards */
-div[data-testid="metric-container"]{
-    background:#1e1e1e;
-    border:1px solid #333;
-    padding:18px;
-    border-radius:14px;
-}
-
-/* Buttons */
-.stButton>button{
-    width:100%;
-    border-radius:10px;
-    height:45px;
-    font-weight:bold;
-}
-
-/* Sidebar */
-section[data-testid="stSidebar"]{
-    border-right:1px solid #2c2c2c;
-}
-
-</style>
-""", unsafe_allow_html=True)
 
 # ====================================
 # LOAD TASKS
