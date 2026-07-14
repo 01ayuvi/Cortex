@@ -8,6 +8,9 @@ from components.sidebar import render_sidebar
 from components.metric_cards import render_metric_cards
 from components.controls import render_controls
 from components.task_actions import render_task_actions
+from components.briefing import render_briefing
+from components.task_table import render_task_table
+from components.analytics import render_analytics
 
 from services.api import (
     get_tasks,
@@ -94,31 +97,7 @@ render_controls()
 # DAILY BRIEFING
 # ====================================
 
-st.subheader("📋 Today's Briefing")
-
-if tasks:
-
-    for task in tasks:
-
-        task_name = task["task"]
-        priority = task["priority"]
-
-        if priority == "HIGH":
-            st.success(f"🔥 {task_name}")
-
-        elif priority == "MEDIUM":
-            st.info(f"📌 {task_name}")
-
-        else:
-            st.warning(f"📄 {task_name}")
-
-else:
-
-    st.info(
-        "No tasks available."
-    )
-
-st.divider()
+render_briefing(tasks)
 
 # ====================================
 # TASK ACTIONS
@@ -132,112 +111,13 @@ st.divider()
 # TASK DATAFRAME
 # ====================================
 
-st.subheader("📌 Task Dashboard")
-
-if tasks:
-
-    df = pd.DataFrame(tasks)
-
-    df = df.rename(
-        columns={
-            "task": "Task",
-            "deadline": "Deadline",
-            "priority": "Priority",
-            "category": "Category",
-            "status": "Status"
-        }
-    )
-
-    if "id" in df.columns:
-        df = df.drop(columns=["id"])
-
-    # -------------------------
-    # SEARCH
-    # -------------------------
-
-    search_term = st.text_input(
-        "🔍 Search Tasks"
-    )
-
-    if search_term:
-
-        df = df[
-            df["Task"]
-            .str.contains(
-                search_term,
-                case=False,
-                na=False
-            )
-        ]
-
-    # -------------------------
-    # FILTER
-    # -------------------------
-
-    priority_filter = st.selectbox(
-        "Filter Priority",
-        [
-            "ALL",
-            "HIGH",
-            "MEDIUM",
-            "LOW"
-        ]
-    )
-
-    if priority_filter != "ALL":
-
-        df = df[
-            df["Priority"]
-            == priority_filter
-        ]
-
-    st.dataframe(
-        df,
-        width="stretch",
-        hide_index=True
-    )
-
-else:
-
-    st.warning(
-        "No tasks found."
-    )
+render_task_table(tasks)
 
 # ====================================
 # PRIORITY ANALYTICS
 # ====================================
 
-st.subheader("📊 Priority Analytics")
-
-if tasks:
-
-    analytics_df = pd.DataFrame(tasks)
-
-    analytics_df = analytics_df.rename(
-        columns={
-            "priority": "Priority"
-        }
-    )
-
-    priority_counts = (
-        analytics_df["Priority"]
-        .value_counts()
-        .rename_axis("Priority")
-        .reset_index(name="Count")
-    )
-
-    st.dataframe(
-        priority_counts,
-        hide_index=True,
-        width="stretch"
-    )
-
-else:
-
-    st.info(
-        "No analytics available."
-    )
-
+render_analytics(tasks)
 
 # ====================================
 # FOOTER
