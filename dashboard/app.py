@@ -5,6 +5,7 @@ import os
 import requests
 
 from styles.theme import apply_theme
+from components.sidebar import render_sidebar
 
 from services.api import (
     get_tasks,
@@ -65,43 +66,11 @@ deadlines = sum(
 # SIDEBAR
 # ====================================
 
-with st.sidebar:
-
-    st.title("🧠 Cortex")
-
-    st.markdown("""
-    ### AI-Powered Email Intelligence Platform
-
-    Automatically process emails, extract tasks using Llama 3, prioritize work, and generate intelligent daily briefings.
-
-    ---
-    """)
-    st.info(
-    "👋 Welcome back! Cortex is ready to analyze your inbox and organize your work."
-    )
-
-    st.divider()
-
-    st.metric(
-        "Total Tasks",
-        total_tasks
-    )
-
-    st.metric(
-        "High Priority",
-        high_priority
-    )
-
-    st.metric(
-        "Deadlines",
-        deadlines
-    )
-
-    st.divider()
-
-    st.caption(
-        "Phase 7 Dashboard"
-    )
+render_sidebar(
+    total_tasks,
+    high_priority,
+    deadlines
+)
 
 # ====================================
 # HEADER
