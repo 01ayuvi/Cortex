@@ -1,62 +1,200 @@
-# Cortex
-
-AI-Powered Email Intelligence Assistant
+# Cortex - AI Powered Email Intelligence Assistant
 
 ## Overview
 
-Cortex is a local AI assistant that connects to Gmail, analyzes unread emails using Llama 3, extracts tasks and deadlines, and generates intelligent daily briefings.
+Cortex is an AI-powered email intelligence assistant that automatically reads unread Gmail messages, extracts actionable tasks using Llama 3, stores organizational knowledge in a vector database, and generates intelligent daily briefings.
+
+The project combines Large Language Models (LLMs), Retrieval-Augmented Generation (RAG), LangGraph multi-agent workflows, FastAPI, and Streamlit into a production-oriented AI application.
+
+---
 
 ## Features
 
-* Gmail OAuth Integration
-* Gmail API Email Retrieval
-* Local Llama 3 Processing (Ollama)
-* Email Priority Classification
-* Task Extraction
-* Deadline Detection
-* Daily Briefing Generation
+### Email Intelligence
+
+* Gmail API Integration
+* Automatic unread email retrieval
+* Email priority detection
+* Security alert detection
+
+### AI Task Extraction
+
+* Llama 3 powered task extraction
+* Deadline identification
+* Task categorization
+* Duplicate task prevention
+
+### Retrieval-Augmented Generation (RAG)
+
+* ChromaDB vector database
+* Semantic email memory
+* Historical email retrieval
+* Context-aware task extraction
+
+### Multi-Agent Workflow (LangGraph)
+
+* Supervisor Agent
+* Email Agent
+* Task Agent
+* Priority Agent
+* Briefing Agent
+
+### Productivity Management
+
+* SQLite task storage
+* Task completion tracking
+* Productivity metrics
+* Daily briefing generation
+
+### Backend & Frontend
+
+* FastAPI REST API
+* Streamlit Dashboard
+* Frontend/Backend separation
+* Real-time task updates
+
+### Software Engineering
+
+* Environment-based configuration
+* Centralized logging
+* Pytest automated testing
+* Git/GitHub workflow
+
+---
 
 ## Architecture
 
-Gmail
+Gmail API
+
 ↓
-Email Reader
+
+Email Fetching Layer
+
 ↓
+
+LangGraph Supervisor Agent
+
+↓
+
+Email Agent
+
+↓
+
+Task Agent (Llama 3 + RAG)
+
+↓
+
 Priority Agent
+
 ↓
-Task Agent
+
+Briefing Agent
+
 ↓
-Daily Briefing Agent
+
+SQLite Database + ChromaDB Vector Store
+
+↓
+
+FastAPI Backend
+
+↓
+
+Streamlit Dashboard
+
+---
 
 ## Tech Stack
 
-* Python
+### AI & LLM
+
 * Ollama
 * Llama 3
+* LangGraph
+
+### RAG & Memory
+
+* ChromaDB
+* Sentence Transformers
+
+### Backend
+
+* FastAPI
+* Python
+
+### Frontend
+
+* Streamlit
+
+### Database
+
+* SQLite
+
+### Integrations
+
 * Gmail API
+
+### Testing
+
+* Pytest
+
+### Version Control
+
 * Git
-* GitHub Projects
+* GitHub
 
-## Roadmap
+---
 
-* Email Draft Generation
-* SQLite Task Storage
-* Memory & RAG
-* - Streamlit Dashboard (In Progress)
-* Docker Deployment
+## Current Project Status
 
-## Current Status
-
-Phase 1: Completed
+### Completed
 
 * Gmail Integration
-* Priority Classification
-
-Phase 2: Completed
-
-* Task Extraction
-* Deadline Detection
-
-Phase 3: In Progress
-
+* Email Classification
+* Priority Detection
 * Daily Briefing Agent
+* Email Draft Generation
+* Task Extraction
+* SQLite Task Storage
+* Workflow Automation
+* Streamlit Dashboard
+* FastAPI Backend
+* Task Completion Workflow
+* Productivity Analytics
+* RAG Memory System
+* LangGraph Multi-Agent Workflow
+* Environment Configuration
+* Logging System
+* Automated Testing
+
+### In Progress
+
+* Docker Deployment
+* CI/CD Pipeline
+
+---
+
+## Future Enhancements
+
+* Docker Containerization
+* GitHub Actions CI/CD
+* Cloud Deployment
+* Calendar Integration
+* Slack Integration
+* Advanced Analytics Dashboard
+
+---
+
+## Learning Outcomes
+
+This project demonstrates:
+
+* Large Language Models (LLMs)
+* Retrieval-Augmented Generation (RAG)
+* Vector Databases
+* Multi-Agent Systems
+* API Development
+* Full Stack Development
+* Software Testing
+* Production Engineering
+* System Design
