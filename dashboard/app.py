@@ -2,10 +2,12 @@ import streamlit as st
 import pandas as pd
 import sys
 import os
-import requests
 
 from styles.theme import apply_theme
 from components.sidebar import render_sidebar
+from components.metric_cards import render_metric_cards
+from components.controls import render_controls
+from components.task_actions import render_task_actions
 
 from services.api import (
     get_tasks,
@@ -85,63 +87,8 @@ st.caption(
 # CONTROL PANEL
 # ====================================
 
-st.subheader("⚡ Cortex Controls")
+render_controls()
 
-col1, col2 = st.columns(2)
-
-with col1:
-
-    if st.button("Run Cortex Pipeline"):
-        with st.spinner("Running Cortex..."):
-            try:
-                result = run_cortex()
-                st.success(
-                    f"Processed {result['emails_processed']} emails | Added {result['new_tasks']} tasks"
-                )
-
-                st.info(
-                    "Refresh the dashboard to see updated results."
-                )
-
-            except Exception as e:
-
-                st.error(
-                    f"Pipeline Error: {e}"
-                ) 
-
-with col2:
-
-    if st.button("Refresh Dashboard"):
-
-        st.rerun()
-
-st.divider()
-
-# ====================================
-# KPI CARDS
-# ====================================
-
-col1, col2, col3 = st.columns(3)
-
-with col1:
-    st.metric(
-        "Total Tasks",
-        total_tasks
-    )
-
-with col2:
-    st.metric(
-        "High Priority",
-        high_priority
-    )
-
-with col3:
-    st.metric(
-        "Deadlines",
-        deadlines
-    )
-
-st.divider()
 
 # ====================================
 # DAILY BRIEFING
@@ -177,43 +124,7 @@ st.divider()
 # TASK ACTIONS
 # ====================================
 
-st.subheader("✅ Task Actions")
-
-for task in tasks:
-
-    col1, col2 = st.columns([4, 1])
-
-    with col1:
-
-        status = task.get(
-            "status",
-            "PENDING"
-        )
-
-        if status == "COMPLETED":
-
-            st.success(
-                f"✅ {task['task']}"
-            )
-
-        else:
-
-            st.write(
-                f"🔲 {task['task']}"
-            )
-
-    with col2:
-
-        if status != "COMPLETED":
-
-            if st.button(
-                "Complete",
-                key=f"complete_{task['id']}"
-            ):
-
-                complete_task(task["id"])
-
-                st.rerun()
+render_task_actions(tasks)
 
 st.divider()
 
@@ -327,36 +238,6 @@ else:
         "No analytics available."
     )
 
-st.subheader("✅ Task Actions")
-
-for task in tasks:
-
-    col1, col2 = st.columns([4, 1])
-
-    with col1:
-
-        st.write(
-            f"{task['task']} "
-            f"({task.get('status', 'PENDING')})"
-        )
-
-    with col2:
-
-        if task.get("status") != "COMPLETED":
-
-            if st.button(
-                "Complete",
-                key=f"task_{task['id']}"
-            ):
-
-                requests.put(
-                    f"http://127.0.0.1:8000/tasks/{task['id']}",
-                    params={
-                        "status": "COMPLETED"
-                    }
-                )
-
-                st.rerun()
 
 # ====================================
 # FOOTER
