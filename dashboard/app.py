@@ -4,6 +4,15 @@ import sys
 import os
 import requests
 
+from styles.theme import apply_theme
+from components.sidebar import render_sidebar
+
+from services.api import (
+    get_tasks,
+    run_cortex,
+    complete_task
+)
+
 sys.path.append(
     os.path.dirname(
         os.path.dirname(
@@ -21,25 +30,21 @@ st.set_page_config(
     page_icon="🧠",
     layout="wide"
 )
+apply_theme()
+# ====================================
+# CUSTOM STYLING
+# ====================================
+
 
 # ====================================
 # LOAD TASKS
 # ====================================
 
 try:
-
-    response = requests.get(
-        "http://127.0.0.1:8000/tasks"
-    )
-
-    tasks = response.json()
+    tasks = get_tasks()
 
 except Exception as e:
-
-    st.error(
-        f"API Error: {e}"
-    )
-
+    st.error(f"API Error: {e}")
     tasks = []
 
 # ====================================
@@ -61,36 +66,11 @@ deadlines = sum(
 # SIDEBAR
 # ====================================
 
-with st.sidebar:
-
-    st.title("🧠 Cortex")
-
-    st.markdown(
-        "AI-Powered Email Intelligence Assistant"
-    )
-
-    st.divider()
-
-    st.metric(
-        "Total Tasks",
-        total_tasks
-    )
-
-    st.metric(
-        "High Priority",
-        high_priority
-    )
-
-    st.metric(
-        "Deadlines",
-        deadlines
-    )
-
-    st.divider()
-
-    st.caption(
-        "Phase 7 Dashboard"
-    )
+render_sidebar(
+    total_tasks,
+    high_priority,
+    deadlines
+)
 
 # ====================================
 # HEADER
@@ -114,11 +94,7 @@ with col1:
     if st.button("Run Cortex Pipeline"):
         with st.spinner("Running Cortex..."):
             try:
-                response = requests.post(
-                "http://127.0.0.1:8000/run-cortex"
-                )
-
-                result = response.json()
+                result = run_cortex()
                 st.success(
                     f"Processed {result['emails_processed']} emails | Added {result['new_tasks']} tasks"
                 )
@@ -235,12 +211,7 @@ for task in tasks:
                 key=f"complete_{task['id']}"
             ):
 
-                requests.put(
-                    f"http://127.0.0.1:8000/tasks/{task['id']}",
-                    params={
-                        "status": "COMPLETED"
-                    }
-                )
+                complete_task(task["id"])
 
                 st.rerun()
 
