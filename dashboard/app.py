@@ -11,6 +11,7 @@ from components.task_actions import render_task_actions
 from components.briefing import render_briefing
 from components.task_table import render_task_table
 from components.analytics import render_analytics
+from components.hero import render_hero
 
 from services.api import (
     get_tasks,
@@ -81,10 +82,7 @@ render_sidebar(
 # HEADER
 # ====================================
 
-st.title("🧠 Cortex AI Assistant")
-st.caption(
-    "AI-Powered Email Intelligence Dashboard"
-)
+render_hero()
 
 # ====================================
 # CONTROL PANEL
