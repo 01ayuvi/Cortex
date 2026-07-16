@@ -14,6 +14,7 @@ from components.analytics import render_analytics
 from components.hero import render_hero
 from components.system_status import render_system_status
 from components.system_status import render_system_status
+from components.analytics import render_analytics
 
 
 from services.api import (

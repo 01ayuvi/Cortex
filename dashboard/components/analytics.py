@@ -4,33 +4,32 @@ import pandas as pd
 
 def render_analytics(tasks):
 
-    st.subheader("📊 Priority Analytics")
+    st.subheader("📊 Analytics")
 
-    if tasks:
+    if not tasks:
+        st.info("No analytics available.")
+        return
 
-        analytics_df = pd.DataFrame(tasks)
+    df = pd.DataFrame(tasks)
 
-        analytics_df = analytics_df.rename(
-            columns={
-                "priority": "Priority"
-            }
-        )
+    # Priority Distribution
+    st.markdown("### Priority Distribution")
 
-        priority_counts = (
-            analytics_df["Priority"]
+    priority_counts = (
+        df["priority"]
+        .value_counts()
+    )
+
+    st.bar_chart(priority_counts)
+
+    # Status Distribution
+    if "status" in df.columns:
+
+        st.markdown("### Task Status")
+
+        status_counts = (
+            df["status"]
             .value_counts()
-            .rename_axis("Priority")
-            .reset_index(name="Count")
         )
 
-        st.dataframe(
-            priority_counts,
-            hide_index=True,
-            width="stretch"
-        )
-
-    else:
-
-        st.info(
-            "No analytics available."
-        )
+        st.bar_chart(status_counts)
