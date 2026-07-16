@@ -13,6 +13,11 @@ from components.task_table import render_task_table
 from components.analytics import render_analytics
 from components.hero import render_hero
 from components.system_status import render_system_status
+from components.system_status import render_system_status
+from components.analytics import render_analytics
+from components.task_cards import render_task_cards
+
+
 from services.api import (
     get_tasks,
     run_cortex,
@@ -103,7 +108,7 @@ render_briefing(tasks)
 # TASK ACTIONS
 # ====================================
 
-render_task_actions(tasks)
+render_task_cards(tasks)
 
 st.divider()
 
