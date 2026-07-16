@@ -12,7 +12,7 @@ from components.briefing import render_briefing
 from components.task_table import render_task_table
 from components.analytics import render_analytics
 from components.hero import render_hero
-
+from components.system_status import render_system_status
 from services.api import (
     get_tasks,
     run_cortex,
@@ -89,6 +89,8 @@ render_hero()
 # ====================================
 
 render_controls()
+
+render_system_status()
 
 
 # ====================================
