@@ -16,7 +16,7 @@ from components.system_status import render_system_status
 from components.system_status import render_system_status
 from components.analytics import render_analytics
 from components.task_cards import render_task_cards
-
+from components.hero import render_hero
 
 from services.api import (
     get_tasks,
@@ -87,7 +87,10 @@ render_sidebar(
 # HEADER
 # ====================================
 
-render_hero()
+render_hero(
+    total_tasks,
+    high_priority
+)
 
 # ====================================
 # CONTROL PANEL

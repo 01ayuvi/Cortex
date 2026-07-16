@@ -1,17 +1,16 @@
 import streamlit as st
 
 
-def render_hero():
-
-    st.title("🧠 Cortex AI Assistant")
+def render_hero(total_tasks, high_priority):
 
     st.markdown(
+        f"""
+        ## 👋 Welcome Back!
+
+        Cortex analyzed your inbox and found **{total_tasks} actionable tasks**.
+
+        🔥 **{high_priority} High Priority**
+
+        ---
         """
-### AI-Powered Email Intelligence Platform
-
-Automatically extracts actionable tasks from Gmail using
-**Llama 3**, **LangGraph**, and **RAG Memory**.
-
----
-"""
     )
